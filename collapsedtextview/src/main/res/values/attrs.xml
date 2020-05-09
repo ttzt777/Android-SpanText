@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="limited_lines" format="integer" />
+    <attr name="collapsed_lines" format="integer" />
+    <attr name="expanded_text" format="string" />
+    <attr name="collapsed_text" format="string" />
+    <attr name="text_link_color" format="color" />
+
+    <declare-styleable name="CollapsedTextView">
+        <attr name="limited_lines" />
+        <attr name="collapsed_lines" />
+        <attr name="expanded_text" />
+        <attr name="collapsed_text" />
+        <attr name="text_link_color" />
+    </declare-styleable>
+
+    <declare-styleable name="ClickableSpanTextView">
+        <attr name="clickable_span_background" format="color" />
+    </declare-styleable>
+</resources>

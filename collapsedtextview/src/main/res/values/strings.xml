@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_ellipses" translatable="false">...</string>
+    <string name="app_expanded" translatable="false">展开全文</string>
+    <string name="app_collapsed" translatable="false">收起</string>
+</resources>
