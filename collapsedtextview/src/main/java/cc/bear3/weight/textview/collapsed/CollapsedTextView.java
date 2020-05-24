@@ -14,23 +14,19 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 
-import com.weseepro.wesee.api.resource.ResourceHelper;
-
 public class CollapsedTextView extends ClickableSpanTextView {
     private static final int DEFAULT_COLLAPSED_LIMIT = 15;      // 不显示展开全文的最大显示行数
     private static final int DEFAULT_COLLAPSED_LINES = 10;      // 折叠后行数
-    private static final String ELLIPSE = ResourceHelper.getString(R.string.app_ellipses); // 末尾省略号
-    private static final String EXPANDED_TEXT = ResourceHelper.getString(R.string.app_expanded); // 折叠时的默认文本
-    private static final String COLLAPSED_TEXT = ResourceHelper.getString(R.string.app_collapsed); //展开时的默认文本
+    private static final String ELLIPSE = "...";
 
     /**
-     * 折叠时的文本
+     * 展开的文本（展开全文）
      */
-    private String mEndExpandedText;
+    private String mEndExpandText;
     /**
-     * 展开时的文本
+     * 折叠的文本（收起）
      */
-    private String mEndCollapsedText;
+    private String mEndCollapseText;
     /**
      * 折叠情况下显示最大行数
      */
@@ -90,36 +86,36 @@ public class CollapsedTextView extends ClickableSpanTextView {
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CollapsedTextView);
 
-            setEndExpandedText(array.getString(R.styleable.CollapsedTextView_expanded_text));
-            setEndCollapsedText(array.getString(R.styleable.CollapsedTextView_collapsed_text));
-            setLimitLines(array.getInt(R.styleable.CollapsedTextView_limited_lines, DEFAULT_COLLAPSED_LIMIT),
-                    array.getInt(R.styleable.CollapsedTextView_collapsed_lines, DEFAULT_COLLAPSED_LINES));
-            setTextLinkColor(array.getColor(R.styleable.CollapsedTextView_text_link_color, SpannableClickable.DEFAULT_COLOR));
+            setEndExpandText(array.getString(R.styleable.CollapsedTextView_ctv_expand_text));
+            setEndCollapseText(array.getString(R.styleable.CollapsedTextView_ctv_collapse_text));
+            setLimitLines(array.getInt(R.styleable.CollapsedTextView_ctv_limited_lines, DEFAULT_COLLAPSED_LIMIT),
+                    array.getInt(R.styleable.CollapsedTextView_ctv_collapsed_lines, DEFAULT_COLLAPSED_LINES));
+            setTextLinkColor(array.getColor(R.styleable.CollapsedTextView_ctv_text_link_color, SpannableClickable.DEFAULT_COLOR));
 
             array.recycle();
         } else {
-            setEndExpandedText(null);
-            setEndCollapsedText(null);
+            setEndExpandText(null);
+            setEndCollapseText(null);
             setLimitLines(DEFAULT_COLLAPSED_LIMIT, DEFAULT_COLLAPSED_LINES);
         }
     }
 
     /**
-     * 设置折叠时的提示文本
+     * 设置展示的提示文本
      *
-     * @param expandedText 提示文本
+     * @param expandText 提示文本
      */
-    public void setEndExpandedText(String expandedText) {
-        this.mEndExpandedText = TextUtils.isEmpty(expandedText) ? EXPANDED_TEXT : expandedText;
+    public void setEndExpandText(String expandText) {
+        this.mEndExpandText = TextUtils.isEmpty(expandText) ? getContext().getString(R.string.expand_text) : expandText;
     }
 
     /**
-     * 设置展开时的提示文本
+     * 设置折叠的提示文本
      *
-     * @param collapsedText 提示文本
+     * @param collapseText 提示文本
      */
-    public void setEndCollapsedText(String collapsedText) {
-        this.mEndCollapsedText = TextUtils.isEmpty(collapsedText) ? COLLAPSED_TEXT : collapsedText;
+    public void setEndCollapseText(String collapseText) {
+        this.mEndCollapseText = TextUtils.isEmpty(collapseText) ? getContext().getString(R.string.collapse_text) : collapseText;
     }
 
     /**
@@ -251,7 +247,7 @@ public class CollapsedTextView extends ClickableSpanTextView {
             int lastLineEnd = layout.getLineVisibleEnd(collapsedLines - 1);
 
             // 计算后缀的宽度
-            float expandedTextWidth =  paint.measureText(ELLIPSE + " " + mEndExpandedText);
+            float expandedTextWidth =  paint.measureText(ELLIPSE + " " + mEndExpandText);
             float lastLineWidth = paint.measureText(mOriginalText, lastLineStart, lastLineEnd);
 
             // 如果大于屏幕宽度则需要减去部分字符
@@ -292,11 +288,11 @@ public class CollapsedTextView extends ClickableSpanTextView {
         int tipsLen;
         // 判断是展开还是收起
         if (mIsExpanded) {
-            spannable.append(mEndCollapsedText);
-            tipsLen = mEndCollapsedText.length();
+            spannable.append(mEndCollapseText);
+            tipsLen = mEndCollapseText.length();
         } else {
-            spannable.append(mEndExpandedText);
-            tipsLen = mEndExpandedText.length();
+            spannable.append(mEndExpandText);
+            tipsLen = mEndExpandText.length();
         }
         // 设置点击事件
         spannable.setSpan(getClickableSpan(), spannable.length() - tipsLen,
@@ -323,7 +319,7 @@ public class CollapsedTextView extends ClickableSpanTextView {
 
     public interface CollapsedTextViewCallback {
         /**
-         * 点击“收起”回调
+         * 点击“展开全文/收起”回调
          */
         void onCollapseClick(boolean expand);
     }
