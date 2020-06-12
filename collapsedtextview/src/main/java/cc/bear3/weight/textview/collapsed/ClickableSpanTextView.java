@@ -26,7 +26,7 @@ public class ClickableSpanTextView extends TextView {
     private final static int DEFAULT_CLICKABLE_SPAN_BACKGROUND = 0xFFCCCCCC;
 
     // 点击部分文字时部分文字的背景色
-    private int clickableSpanBgColor;
+    protected int clickableSpanBgColor;
 
     // 点击Clickable后添加背景Span
     private BackgroundColorSpan mBgSpan;
@@ -89,14 +89,20 @@ public class ClickableSpanTextView extends TextView {
 
 //            mClickLinks = buffer.getSpans(off, off, ClickableSpan.class);
             if (mClickLinks.length > 0) {
+                ClickableSpan clickableSpan = mClickLinks[0];
+
                 Selection.setSelection(buffer,
-                        buffer.getSpanStart(mClickLinks[0]),
-                        buffer.getSpanEnd(mClickLinks[0]));
+                        buffer.getSpanStart(clickableSpan),
+                        buffer.getSpanEnd(clickableSpan));
                 //设置点击区域的背景色
-                mBgSpan = new BackgroundColorSpan(clickableSpanBgColor);
+                int bgColor = clickableSpanBgColor;
+                if (clickableSpan instanceof ColorClickableSpan) {
+                    bgColor = ((ColorClickableSpan) clickableSpan).getBgColor();
+                }
+                mBgSpan = new BackgroundColorSpan(bgColor);
                 buffer.setSpan(mBgSpan,
-                        buffer.getSpanStart(mClickLinks[0]),
-                        buffer.getSpanEnd(mClickLinks[0]),
+                        buffer.getSpanStart(clickableSpan),
+                        buffer.getSpanEnd(clickableSpan),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 return true;

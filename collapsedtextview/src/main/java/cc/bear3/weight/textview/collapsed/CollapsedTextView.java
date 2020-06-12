@@ -19,50 +19,28 @@ public class CollapsedTextView extends ClickableSpanTextView {
     private static final int DEFAULT_COLLAPSED_LINES = 10;      // 折叠后行数
     private static final String ELLIPSE = "...";
 
-    /**
-     * 展开的文本（展开全文）
-     */
+    // 展开的文本（展开全文）
     private String mEndExpandText;
-    /**
-     * 折叠的文本（收起）
-     */
+    // 折叠的文本（收起）
     private String mEndCollapseText;
-    /**
-     * 折叠情况下显示最大行数
-     */
+    // 折叠情况下显示最大行数
     private int limitLines;
-    /**
-     * 折叠后显示的行数
-     */
+    // 折叠后显示的行数
     private int collapsedLines;
-    /**
-     * 记录行数
-     */
+    // 记录行数
     private int lineCount;
-    /**
-     * 原始的文本
-     */
+    // 原始的文本
     private CharSequence mOriginalText;
-    /**
-     * 折叠后的文本
-     */
+    // 折叠后的文本
     private CharSequence mCollapsedText;
-    /**
-     * 展开状态
-     */
+    // 展开状态
     private boolean mIsExpanded;
-    /**
-     * TextView中文字可显示的宽度
-     */
+    // TextView中文字可显示的宽度
     private int mShowWidth;
-    /**
-     * TextView中出现的ClickSpan的颜色
-     */
+    // TextView中出现的ClickSpan的颜色
     private int mTextLinkColor;
-    /**
-     * 展开收起的文字Span
-     */
-    private SpannableClickable mClickableSpan;
+    // 展开收起的文字Span
+    private ColorClickableSpan mClickableSpan;
 
     private BufferType mBufferType = BufferType.SPANNABLE;
 
@@ -82,21 +60,34 @@ public class CollapsedTextView extends ClickableSpanTextView {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CollapsedTextView);
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        if (text == null) {
+            text = "";
+        }
 
-            setEndExpandText(array.getString(R.styleable.CollapsedTextView_ctv_expand_text));
-            setEndCollapseText(array.getString(R.styleable.CollapsedTextView_ctv_collapse_text));
-            setLimitLines(array.getInt(R.styleable.CollapsedTextView_ctv_limited_lines, DEFAULT_COLLAPSED_LIMIT),
-                    array.getInt(R.styleable.CollapsedTextView_ctv_collapsed_lines, DEFAULT_COLLAPSED_LINES));
-            setTextLinkColor(array.getColor(R.styleable.CollapsedTextView_ctv_text_link_color, SpannableClickable.DEFAULT_COLOR));
+        updateContent(CharUtil.trimFrom(text));
 
-            array.recycle();
+        // 如果text为空则直接显示
+        if (TextUtils.isEmpty(mOriginalText)) {
+            super.setText(mOriginalText, this.mBufferType);
+        } else if (mIsExpanded) {
+            // 保存原始文本，去掉文本末尾的空字符
+            formatExpandedText();
         } else {
-            setEndExpandText(null);
-            setEndCollapseText(null);
-            setLimitLines(DEFAULT_COLLAPSED_LIMIT, DEFAULT_COLLAPSED_LINES);
+            // 获取TextView中文字显示的宽度，需要在layout之后才能获取到，避免重复获取
+            if (mShowWidth == 0) {
+                getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        mShowWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+                        formatCollapsedText();
+                    }
+                });
+            } else {
+                formatCollapsedText();
+            }
         }
     }
 
@@ -192,6 +183,24 @@ public class CollapsedTextView extends ClickableSpanTextView {
             } else {
                 formatCollapsedText();
             }
+        }
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CollapsedTextView);
+
+            setEndExpandText(array.getString(R.styleable.CollapsedTextView_ctv_expand_text));
+            setEndCollapseText(array.getString(R.styleable.CollapsedTextView_ctv_collapse_text));
+            setLimitLines(array.getInt(R.styleable.CollapsedTextView_ctv_limited_lines, DEFAULT_COLLAPSED_LIMIT),
+                    array.getInt(R.styleable.CollapsedTextView_ctv_collapsed_lines, DEFAULT_COLLAPSED_LINES));
+            setTextLinkColor(array.getColor(R.styleable.CollapsedTextView_ctv_text_link_color, ColorClickableSpan.DEFAULT_COLOR));
+
+            array.recycle();
+        } else {
+            setEndExpandText(null);
+            setEndCollapseText(null);
+            setLimitLines(DEFAULT_COLLAPSED_LIMIT, DEFAULT_COLLAPSED_LINES);
         }
     }
 
@@ -299,9 +308,9 @@ public class CollapsedTextView extends ClickableSpanTextView {
                 spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
-    private SpannableClickable getClickableSpan() {
+    private ColorClickableSpan getClickableSpan() {
         if (mClickableSpan == null) {
-            mClickableSpan = new SpannableClickable(mTextLinkColor) {
+            mClickableSpan = new ColorClickableSpan(mTextLinkColor, clickableSpanBgColor) {
                 @Override
                 public void onClick(@NonNull View widget) {
                     mIsExpanded = !mIsExpanded;
