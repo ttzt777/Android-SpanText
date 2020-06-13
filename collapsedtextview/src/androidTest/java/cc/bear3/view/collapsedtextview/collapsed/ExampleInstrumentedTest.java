@@ -1,4 +1,4 @@
-package cc.bear3.weight.textview.collapsed;
+package cc.bear3.view.collapsedtextview.collapsed;
 
 import android.content.Context;
 

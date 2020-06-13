@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 29
@@ -21,13 +22,27 @@ android {
         }
     }
 
+    //忽略警告
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+publish {
+    repoName = 'view'
+    userOrg = 'ttzt777'//bintray.com用户名
+    groupId = 'cc.bear3.view.collapsedtextview'//jcenter上的路径
+    artifactId = 'collapsedtextview'//项目名称
+    publishVersion = "${version_name}"//版本号
+    desc = 'Collapsed text view!'//描述，不重要
+    website = 'https://github.com/ttzt777/Android-CollapsedTextView'//网站，最好有，不重要
 }

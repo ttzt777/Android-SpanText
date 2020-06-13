@@ -1,4 +1,4 @@
-package cc.bear3.weight.textview.collapsed;
+package cc.bear3.view.collapsedtextview;
 
 public class CharUtil {
     /**

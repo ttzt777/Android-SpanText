@@ -1,17 +1,18 @@
-package cc.bear3.weight.textview.collapsed;
+package cc.bear3.view.collapsedtextview;
 
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class StringUtil {
 
     /**
      * 当出现字符限制的时候，emoj表情为四个字节，强制去除两个字节后会乱码，因此去除前两个字节
-     * @param charSequence
-     * @return
+     * @param charSequence 待处理的字符串
+     * @return 处理后的字符串
      */
-    public static CharSequence removeLastHalfEmoj(@NonNull CharSequence charSequence) {
+    @Nullable
+    public static CharSequence removeLastHalfEmoj(@Nullable CharSequence charSequence) {
         if (TextUtils.isEmpty(charSequence)) {
             return charSequence;
         }
@@ -26,10 +27,11 @@ public class StringUtil {
 
     /**
      * 当出现字符限制的时候，emoj表情为四个字节，强制去除两个字节后会乱码，因此去除前两个字节
-     * @param string
-     * @return
+     * @param string 待处理的字符串
+     * @return 处理后的字符串
      */
-    public static String removeLastHalfEmoj(@NonNull String string) {
+    @Nullable
+    public static String removeLastHalfEmoj(@Nullable String string) {
         if (TextUtils.isEmpty(string)) {
             return string;
         }

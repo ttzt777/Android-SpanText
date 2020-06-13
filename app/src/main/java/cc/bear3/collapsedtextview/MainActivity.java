@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import cc.bear3.weight.textview.collapsed.CollapsedTextView;
+import cc.bear3.view.collapsedtextview.CollapsedTextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +24,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        titleTextView.setContent(getString(R.string.title_text));
+//        titleTextView.setContent(getString(R.string.title_text));
     }
 }

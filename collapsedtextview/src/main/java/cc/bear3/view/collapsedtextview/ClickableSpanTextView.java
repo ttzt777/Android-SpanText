@@ -1,4 +1,4 @@
-package cc.bear3.weight.textview.collapsed;
+package cc.bear3.view.collapsedtextview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,10 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
+
+import cc.bear3.view.collapsedtextview.collapsed.R;
 
 /**
  * 替代LinkMomentMethod，实现TextView有ClickableSpan的时候实现点击事件
@@ -20,8 +23,7 @@ import android.widget.TextView;
  * @author TT
  * @since 2019/06/12
  */
-@SuppressLint("AppCompatCustomView")
-public class ClickableSpanTextView extends TextView {
+public class ClickableSpanTextView extends AppCompatTextView {
 
     private final static int DEFAULT_CLICKABLE_SPAN_BACKGROUND = 0xFFCCCCCC;
 
@@ -56,6 +58,7 @@ public class ClickableSpanTextView extends TextView {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {

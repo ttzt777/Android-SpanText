@@ -7,13 +7,15 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <cc.bear3.weight.textview.collapsed.CollapsedTextView
+    <cc.bear3.view.collapsedtextview.CollapsedTextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="3.6dp"
+        android:text="@string/title_text"
         android:textColor="#333333"
         android:textSize="16sp"
+        app:ctv_collapse_able="true"
         app:ctv_collapsed_lines="4"
         app:ctv_limited_lines="6" />
 

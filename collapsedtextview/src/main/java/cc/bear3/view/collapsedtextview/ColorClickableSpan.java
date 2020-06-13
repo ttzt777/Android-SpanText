@@ -1,4 +1,4 @@
-package cc.bear3.weight.textview.collapsed;
+package cc.bear3.view.collapsedtextview;
 
 import android.graphics.Color;
 import android.text.TextPaint;
@@ -6,9 +6,9 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 /**
- * @author yiw
- * @Description:
- * @date 16/1/2 16:32
+ * 自定义ClickableSpan 去掉下划线，增加背景色预设值
+ * @author tt
+ * @since  2020-06-13
  */
 public abstract class ColorClickableSpan extends ClickableSpan implements View.OnClickListener {
 
@@ -42,11 +42,16 @@ public abstract class ColorClickableSpan extends ClickableSpan implements View.O
         ds.clearShadowLayer();
     }
 
+    public void setTextColor(int textColor, int bgColor) {
+        this.textColor = textColor;
+        this.bgColor = bgColor;
+    }
+
     public int getBgColor() {
         return bgColor;
     }
 
-    private static int getDefaultBgColorByTextColor(int textColor) {
+    static int getDefaultBgColorByTextColor(int textColor) {
         int alpha = (int) (Color.alpha(textColor) * 0.3f);
         return (textColor & 0x00FFFFFF) | (alpha << 24);
     }
