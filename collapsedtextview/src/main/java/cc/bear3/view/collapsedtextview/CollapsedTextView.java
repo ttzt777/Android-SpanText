@@ -89,7 +89,7 @@ public class CollapsedTextView extends ClickableSpanTextView {
             text = "";
         }
 
-        updateContent(CharUtil.trimFrom(text));
+        updateContent(text);
 
         // 如果text为空则直接显示
         if (TextUtils.isEmpty(originalText)) {
@@ -413,15 +413,15 @@ public class CollapsedTextView extends ClickableSpanTextView {
             float lastLineWidth = StaticLayout.getDesiredWidth(originalText, lastLineStart, lastLineEnd, getPaint());
 
             // 如果大于屏幕宽度则需要减去部分字符
-            if (lastLineWidth + expandedTextWidth > showWidth) {
-                int cutCount = getPaint().breakText(originalText, lastLineStart, lastLineEnd, true, expandedTextWidth, null);
-                lastLineEnd -= cutCount;
+            while (lastLineWidth + expandedTextWidth > showWidth && lastLineStart < lastLineEnd) {
+                lastLineEnd--;
+                lastLineWidth = StaticLayout.getDesiredWidth(originalText, lastLineStart, lastLineEnd, getPaint());
             }
 
             // 因设置的文本可能是带有样式的文本，如SpannableStringBuilder，所以根据计算的字符数从原始文本中截取
             SpannableStringBuilder spannable = new SpannableStringBuilder();
             // 截取文本，还是因为原始文本的样式原因不能直接使用paragraphs中的文本
-            collapsedText = StringUtil.removeLastHalfEmoj(originalText.subSequence(0, lastLineEnd));
+            collapsedText = originalText.subSequence(0, lastLineEnd);
             spannable.append(collapsedText);
             spannable.append(ELLIPSE);
             // 设置样式
