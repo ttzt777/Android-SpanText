@@ -17,6 +17,8 @@
         android:textSize="16sp"
         app:ctv_collapse_able="true"
         app:ctv_collapsed_lines="4"
+        app:ctv_text_link_color="#FFFF0000"
+        app:ctv_text_link_bg_color="#FFFFCE25"
         app:ctv_limited_lines="6" />
 
 </LinearLayout>

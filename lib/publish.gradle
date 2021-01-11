@@ -12,7 +12,7 @@ def urlDef = "https://github.com/ttzt777/Android-CollapsedTextView"
 publishing {
     publications {
         Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/collapsedtextview-release.aar")
+            artifact("$buildDir/outputs/aar/lib-release.aar")
             groupId "$groupDef"
             artifactId "$artifactDef"
             version "$versionDef"

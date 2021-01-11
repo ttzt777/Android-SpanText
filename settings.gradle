@@ -1,3 +1,3 @@
-rootProject.name='CollapsedTextView'
+rootProject.name='Android-CollapsedTextView'
 include ':app'
-include ':collapsedtextview'
+include ':lib'
