@@ -140,7 +140,7 @@ class CollapsedTextView @JvmOverloads constructor(
      */
     fun setCollapseEnable(collapseEnable: Boolean) {
         this.collapseEnable = collapseEnable
-        setText(text, bufferType)
+        setText(originalText, bufferType)
     }
 
     /**
@@ -151,7 +151,7 @@ class CollapsedTextView @JvmOverloads constructor(
      */
     fun setExpandEnable(expandEnable: Boolean) {
         this.expandEnable = expandEnable
-        setText(text, bufferType)
+        setText(originalText, bufferType)
     }
 
     /**
@@ -164,7 +164,8 @@ class CollapsedTextView @JvmOverloads constructor(
     fun setEndExpandText(expandText: String?, refresh: Boolean = true) {
         endExpandText = if (TextUtils.isEmpty(expandText)) context.getString(R.string.expand_text) else expandText
         if (refresh) {
-            setText(text, bufferType)
+            resetParams()
+            setText(originalText, bufferType)
         }
     }
 
@@ -178,7 +179,7 @@ class CollapsedTextView @JvmOverloads constructor(
     fun setEndCollapseText(collapseText: String?, refresh: Boolean = true) {
         endCollapseText = if (TextUtils.isEmpty(collapseText)) context.getString(R.string.collapse_text) else collapseText
         if (refresh) {
-            setText(text, bufferType)
+            setText(originalText, bufferType)
         }
     }
 
@@ -189,7 +190,7 @@ class CollapsedTextView @JvmOverloads constructor(
      */
     fun setTextLinkColor(@ColorInt textLinkColor: Int) {
         this.textLinkColor = textLinkColor
-        setText(text, bufferType)
+        setText(originalText, bufferType)
     }
 
     /**
@@ -199,7 +200,7 @@ class CollapsedTextView @JvmOverloads constructor(
      */
     fun setTextLinkBgColor(@ColorInt textLinkBgColor: Int) {
         this.textLinkBgColor = textLinkBgColor
-        setText(text, bufferType)
+        setText(originalText, bufferType)
     }
 
     /**
@@ -225,7 +226,8 @@ class CollapsedTextView @JvmOverloads constructor(
         this.limitLines = targetLimitLines
         this.collapsedLines = targetCollapsedLines
         if (refresh) {
-            setText(text, bufferType)
+            resetParams()
+            setText(originalText, bufferType)
         }
     }
 
@@ -242,7 +244,8 @@ class CollapsedTextView @JvmOverloads constructor(
         }
         this.showWidth = showWidth
         if (refresh) {
-            setText(text, bufferType)
+            resetParams()
+            setText(originalText, bufferType)
         }
     }
 
@@ -259,7 +262,7 @@ class CollapsedTextView @JvmOverloads constructor(
         }
         this.isExpanded = isExpanded
         if (refresh) {
-            setText(text, bufferType)
+            setText(originalText, bufferType)
         }
     }
 
@@ -290,8 +293,7 @@ class CollapsedTextView @JvmOverloads constructor(
         originalText = targetText
 
         // 复位
-        collapsedText = null
-        textLineCount = 0
+        resetParams()
     }
 
     /**
@@ -411,9 +413,7 @@ class CollapsedTextView @JvmOverloads constructor(
                 override fun onClick(widget: View) {
                     isExpanded = !isExpanded
                     setText(originalText, bufferType)
-                    if (listener != null) {
-                        listener!!.onCollapseClick(isExpanded)
-                    }
+                    listener?.onCollapseClick(isExpanded)
                 }
             }
         }
@@ -431,6 +431,10 @@ class CollapsedTextView @JvmOverloads constructor(
         return endTextSpan!!
     }
 
+    private fun resetParams() {
+        collapsedText = null
+        textLineCount = 0
+    }
 
     interface CollapsedTextViewCallback {
         /**

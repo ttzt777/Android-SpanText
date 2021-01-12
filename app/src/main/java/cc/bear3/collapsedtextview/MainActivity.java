@@ -1,19 +1,20 @@
 package cc.bear3.collapsedtextview;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cc.bear3.view.collapsedtextview.ClickableSpanTextView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import cc.bear3.view.collapsedtextview.CollapsedTextView;
 import cc.bear3.view.collapsedtextview.ColorClickableSpan;
 
 public class MainActivity extends AppCompatActivity {
 
     private CollapsedTextView titleTextView;
+
+    private boolean changed = false;
 
     static {
         ColorClickableSpan.Companion.setDefaultTextColor(0xFFFFCE25);
@@ -35,7 +36,15 @@ public class MainActivity extends AppCompatActivity {
         titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                titleTextView.setTextLinkColor(Color.BLACK);
+//                int showWidth = 500;
+//                ViewGroup.LayoutParams params = titleTextView.getLayoutParams();
+//                params.width = showWidth;
+//                titleTextView.setLayoutParams(params);
+//                titleTextView.setShowWidth(showWidth);
+
+                titleTextView.setEndExpandText("来来来来来来来来来");
+
+                titleTextView.setTextLinkColor(Color.MAGENTA);
                 titleTextView.setTextLinkBgColor(Color.CYAN);
             }
         });

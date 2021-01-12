@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.bintray'
 def repoDef = "view"
 def groupDef = "cc.bear3.view.collapsedtextview"
 def artifactDef = "collapsedtextview"
-def versionDef = "1.0.0-alpha04"
+def versionDef = "1.0.0"
 def descriptionDef = "Collapsed text view!"
 def urlDef = "https://github.com/ttzt777/Android-CollapsedTextView"
 

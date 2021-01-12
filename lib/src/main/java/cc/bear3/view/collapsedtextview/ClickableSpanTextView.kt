@@ -64,8 +64,8 @@ open class ClickableSpanTextView @JvmOverloads constructor(
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 // 按下事件
-                var x = event.x
-                var y = event.y
+                var x = event.x.toInt()
+                var y = event.y.toInt()
 
                 x -= totalPaddingLeft
                 y -= totalPaddingTop
@@ -73,12 +73,26 @@ open class ClickableSpanTextView @JvmOverloads constructor(
                 x += scrollX
                 y += scrollY
 
-                val line = layout.getLineForVertical(y.toInt())
-                val off = layout.getOffsetForHorizontal(line, x)
+                val line = layout.getLineForVertical(y)
+                val off = layout.getOffsetForHorizontal(line, x.toFloat())
 
                 // 点击文字后面的空白会导致 off = 文字长度，此时span在文字最后会导致getSpans()判断不准确
                 // 原写法 mClickLinks = buffer.getSpans(off, off, ClickableSpan.class)
-                mClickLinks = if (off < buffer.length) {
+                val needGetSpan = when {
+                    off < buffer.length -> {
+                        true
+                    }
+                    off == buffer.length -> {
+                        // 点击到最后一个半个字符或者后面的空白
+                        val lineWidth = layout.getLineWidth(line)
+                        x <= lineWidth
+                    }
+                    else -> {
+                        false
+                    }
+                }
+
+                mClickLinks = if (needGetSpan) {
                     buffer.getSpans(off, off, ClickableSpan::class.java)
                 } else {
                     emptyArray()
