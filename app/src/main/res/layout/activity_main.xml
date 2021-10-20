@@ -7,7 +7,7 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <cc.bear3.view.collapsedtextview.CollapsedTextView
+    <cc.bear3.span.collapsed.CollapsedTextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

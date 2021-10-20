@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CollapsedTextView">
+        <!-- 是否允许折叠 -->
+        <attr name="ctv_collapse_able" format="boolean" />
+        <!-- 是否允许展开 -->
+        <attr name="ctv_expand_able" format="boolean" />
+        <!-- 折叠之前显示的最大行数 -->
+        <attr name="ctv_limited_lines" format="integer" />
+        <!-- 折叠后的行数 -->
+        <attr name="ctv_collapsed_lines" format="integer" />
+        <!-- 展开的文案 -->
+        <attr name="ctv_expand_text" format="string" />
+        <!-- 收起的文案 -->
+        <attr name="ctv_collapse_text" format="string" />
+        <!-- 展开、收起的文字颜色 -->
+        <attr name="ctv_text_link_color" format="color" />
+        <!-- 展开、收起文字点击后的背景颜色 -->
+        <attr name="ctv_text_link_bg_color" format="color" />
+    </declare-styleable>
+</resources>

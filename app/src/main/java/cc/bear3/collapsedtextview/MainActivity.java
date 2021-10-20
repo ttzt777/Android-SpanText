@@ -3,12 +3,11 @@ package cc.bear3.collapsedtextview;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import cc.bear3.view.collapsedtextview.CollapsedTextView;
-import cc.bear3.view.collapsedtextview.ColorClickableSpan;
+import cc.bear3.span.collapsed.CollapsedTextView;
+import cc.bear3.span.kernel.ColorClickableSpan;
 
 public class MainActivity extends AppCompatActivity {
 

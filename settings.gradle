@@ -1,3 +1,4 @@
-rootProject.name='Android-CollapsedTextView'
+rootProject.name='Android-SpanTextView'
 include ':app'
-include ':lib'
+include ':span-kernel'
+include ':span-collapsed'

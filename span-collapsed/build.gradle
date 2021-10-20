@@ -1,0 +1,19 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+apply from: "../publish.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(path: ':span-kernel')
+
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$testJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+}
