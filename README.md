@@ -16,12 +16,12 @@
         implementation 'com.github.ttzt777.Android-SpanTextView:span-collapsed:1.0.0'
     }
 ```
-### **spannable-kernel**
+### **span-kernel**
 - 支持TextView中Span的点击事件处理，无需设置MovementMethod
 - 优化Span点击逻辑，修复末尾时点击空白区域会判定到最后一个Span的问题
 - 提供自定义点击Span，移除下划线，支持默认点击更改背景色
 - 提供工具类移除CharSequence中的半个emoj表情
-### **spannable-collapsed**
+### **span-collapsed**
 - 支持文本折叠和普通显示
 - 支持在末尾显示展开全文且无点击事件
 - 支持传入固定宽度和自动Layout后获取宽度
