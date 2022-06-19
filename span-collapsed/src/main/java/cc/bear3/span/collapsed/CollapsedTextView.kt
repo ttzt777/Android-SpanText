@@ -11,13 +11,14 @@ import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.annotation.ColorInt
 import cc.bear3.span.kernel.ClickableSpanTextView
-import cc.bear3.span.kernel.ColorClickableSpan
+import cc.bear3.span.kernel.CustomClickableSpan
+import cc.bear3.span.kernel.alpha
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class CollapsedTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ClickableSpanTextView(context, attrs, defStyleAttr) {
 
     // 是否允许折叠 true -- 折叠功能 false -- 普通TextView
@@ -39,12 +40,10 @@ class CollapsedTextView @JvmOverloads constructor(
     private var endCollapseText: String? = null
 
     // "展开、收起"的Span的颜色
-    @ColorInt
-    private var textLinkColor = 0
+    private var textLinkColor = CustomClickableSpan.defaultTextColor
 
     // "展开、收起"的Span点击后的背景颜色
-    @ColorInt
-    private var textLinkBgColor : Int? = null
+    private var textLinkBgColor: Int = textLinkColor.alpha()
 
     // 原始的文本
     private var originalText: CharSequence = ""
@@ -71,31 +70,40 @@ class CollapsedTextView @JvmOverloads constructor(
     init {
         if (attrs != null) {
             val array = context.obtainStyledAttributes(attrs, R.styleable.CollapsedTextView)
-            collapseEnable = array.getBoolean(R.styleable.CollapsedTextView_ctv_collapse_able, collapseEnable)
-            expandEnable = array.getBoolean(R.styleable.CollapsedTextView_ctv_expand_able, expandEnable)
+            collapseEnable =
+                array.getBoolean(R.styleable.CollapsedTextView_ctv_collapse_able, collapseEnable)
+            expandEnable =
+                array.getBoolean(R.styleable.CollapsedTextView_ctv_expand_able, expandEnable)
             setLimitLines(
-                    array.getInt(R.styleable.CollapsedTextView_ctv_limited_lines, DEFAULT_COLLAPSED_LIMIT),
-                    array.getInt(R.styleable.CollapsedTextView_ctv_collapsed_lines, DEFAULT_COLLAPSED_LINES),
-                    false)
+                array.getInt(
+                    R.styleable.CollapsedTextView_ctv_limited_lines,
+                    DEFAULT_COLLAPSED_LIMIT
+                ),
+                array.getInt(
+                    R.styleable.CollapsedTextView_ctv_collapsed_lines,
+                    DEFAULT_COLLAPSED_LINES
+                ),
+                false
+            )
             setEndExpandText(array.getString(R.styleable.CollapsedTextView_ctv_expand_text), false)
-            setEndCollapseText(array.getString(R.styleable.CollapsedTextView_ctv_collapse_text), false)
-            textLinkColor = array.getColor(R.styleable.CollapsedTextView_ctv_text_link_color, ColorClickableSpan.defaultTextColor)
-            textLinkBgColor = if (array.hasValue(R.styleable.CollapsedTextView_ctv_text_link_bg_color)) {
-                val defaultTextLinkBgColor = if (ColorClickableSpan.defaultBgColorAlphaByTextColor != null) {
-                    ColorClickableSpan.getBgColorByTextColor(textLinkColor, ColorClickableSpan.defaultBgColorAlphaByTextColor!!)
-                } else {
-                    defaultClickableSpanBgColor ?: Color.TRANSPARENT
-                }
-                array.getColor(R.styleable.CollapsedTextView_ctv_text_link_bg_color, defaultTextLinkBgColor)
-            } else {
-                null
-            }
+            setEndCollapseText(
+                array.getString(R.styleable.CollapsedTextView_ctv_collapse_text),
+                false
+            )
+            textLinkColor = array.getColor(
+                R.styleable.CollapsedTextView_ctv_text_link_color,
+                CustomClickableSpan.defaultTextColor
+            )
+            textLinkBgColor = array.getColor(
+                R.styleable.CollapsedTextView_ctv_text_link_bg_color,
+                textLinkColor.alpha()
+            )
             array.recycle()
         } else {
             setEndExpandText(null, false)
             setEndCollapseText(null, false)
-            textLinkColor = ColorClickableSpan.defaultTextColor
-            textLinkBgColor = null
+            textLinkColor = CustomClickableSpan.defaultTextColor
+            textLinkBgColor = textLinkColor.alpha()
         }
 
         // 重置一遍，因为TextView获取到Xml中设置的text在自定义View属性获取之前
@@ -163,7 +171,8 @@ class CollapsedTextView @JvmOverloads constructor(
      */
     @JvmOverloads
     fun setEndExpandText(expandText: String?, refresh: Boolean = true) {
-        endExpandText = if (TextUtils.isEmpty(expandText)) context.getString(R.string.expand_text) else expandText
+        endExpandText =
+            if (TextUtils.isEmpty(expandText)) context.getString(R.string.expand_text) else expandText
         if (refresh) {
             resetParams()
             setText(originalText, bufferType)
@@ -178,7 +187,8 @@ class CollapsedTextView @JvmOverloads constructor(
      */
     @JvmOverloads
     fun setEndCollapseText(collapseText: String?, refresh: Boolean = true) {
-        endCollapseText = if (TextUtils.isEmpty(collapseText)) context.getString(R.string.collapse_text) else collapseText
+        endCollapseText =
+            if (TextUtils.isEmpty(collapseText)) context.getString(R.string.collapse_text) else collapseText
         if (refresh) {
             setText(originalText, bufferType)
         }
@@ -286,7 +296,7 @@ class CollapsedTextView @JvmOverloads constructor(
     }
 
     private fun updateContent(charSequence: CharSequence?) {
-        val targetText  = charSequence ?: ""
+        val targetText = charSequence ?: ""
 
         if (originalText == targetText) {
             return
@@ -320,19 +330,22 @@ class CollapsedTextView @JvmOverloads constructor(
         val layout: StaticLayout
         layout = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val builder = StaticLayout.Builder.obtain(
-                    originalText,
-                    0,
-                    originalText.length,
-                    paint,
-                    showWidth)
+                originalText,
+                0,
+                originalText.length,
+                paint,
+                showWidth
+            )
             builder.setAlignment(Layout.Alignment.ALIGN_NORMAL)
-                    .setLineSpacing(lineSpacingExtra, lineSpacingMultiplier)
-                    .setIncludePad(false)
+                .setLineSpacing(lineSpacingExtra, lineSpacingMultiplier)
+                .setIncludePad(false)
             builder.build()
         } else {
-            StaticLayout(originalText, paint, showWidth,
-                    Layout.Alignment.ALIGN_NORMAL,
-                    lineSpacingMultiplier, lineSpacingExtra, false)
+            StaticLayout(
+                originalText, paint, showWidth,
+                Layout.Alignment.ALIGN_NORMAL,
+                lineSpacingMultiplier, lineSpacingExtra, false
+            )
         }
         textLineCount = layout.lineCount
         if (textLineCount <= limitLines) {
@@ -348,12 +361,14 @@ class CollapsedTextView @JvmOverloads constructor(
 
             // 计算后缀的宽度
             val expandedTextWidth = StaticLayout.getDesiredWidth("$ELLIPSE $endExpandText", paint)
-            var lastLineWidth = StaticLayout.getDesiredWidth(originalText, lastLineStart, lastLineEnd, paint)
+            var lastLineWidth =
+                StaticLayout.getDesiredWidth(originalText, lastLineStart, lastLineEnd, paint)
 
             // 如果大于屏幕宽度则需要减去部分字符
             while (lastLineWidth + expandedTextWidth > showWidth && lastLineStart < lastLineEnd) {
                 lastLineEnd--
-                lastLineWidth = StaticLayout.getDesiredWidth(originalText, lastLineStart, lastLineEnd, paint)
+                lastLineWidth =
+                    StaticLayout.getDesiredWidth(originalText, lastLineStart, lastLineEnd, paint)
             }
 
             // 因设置的文本可能是带有样式的文本，如SpannableStringBuilder，所以根据计算的字符数从原始文本中截取
@@ -394,8 +409,10 @@ class CollapsedTextView @JvmOverloads constructor(
             endExpandText!!.length
         }
         // 设置点击事件
-        spannable.setSpan(getEndTextSpan(), spannable.length - tipsLen,
-                spannable.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(
+            getEndTextSpan(), spannable.length - tipsLen,
+            spannable.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
     }
 
     private fun getEndTextSpan(): CharacterStyle {
@@ -407,15 +424,16 @@ class CollapsedTextView @JvmOverloads constructor(
     }
 
     private fun getEndTextClickableSpan(): CharacterStyle {
-        if (endTextSpan is ColorClickableSpan) {
-            (endTextSpan as ColorClickableSpan).setTextColor(textLinkColor, textLinkBgColor)
+        if (endTextSpan is CustomClickableSpan) {
+            (endTextSpan as CustomClickableSpan).run {
+                this.textColor = textLinkColor
+                this.bgColor = textLinkBgColor
+            }
         } else {
-            endTextSpan = object : ColorClickableSpan(textLinkColor, textLinkBgColor) {
-                override fun onClick(widget: View) {
-                    isExpanded = !isExpanded
-                    setText(originalText, bufferType)
-                    listener?.onCollapseClick(isExpanded)
-                }
+            endTextSpan = CustomClickableSpan(textLinkColor, bgColor = textLinkBgColor) {
+                isExpanded = !isExpanded
+                setText(originalText, bufferType)
+                listener?.onCollapseClick(isExpanded)
             }
         }
         return endTextSpan!!

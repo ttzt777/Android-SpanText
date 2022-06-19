@@ -7,18 +7,37 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <cc.bear3.span.collapsed.CollapsedTextView
-        android:id="@+id/tv_title"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="3.6dp"
-        android:text="@string/title_text"
-        android:textColor="#333333"
-        android:textSize="16sp"
-        app:ctv_collapse_able="true"
-        app:ctv_collapsed_lines="4"
-        app:ctv_text_link_color="#FFFF0000"
-        app:ctv_text_link_bg_color="#FFFFCE25"
-        app:ctv_limited_lines="6" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <cc.bear3.span.collapsed.CollapsedTextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3.6dp"
+            android:text="@string/title_text"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            app:ctv_collapse_able="true"
+            app:ctv_collapsed_lines="4"
+
+            app:ctv_limited_lines="6" />
+
+            <cc.bear3.span.kernel.ClickableSpanTextView
+                android:id="@+id/tv_char_sequence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="3.6dp"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
