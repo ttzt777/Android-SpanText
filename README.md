@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/ttzt777/Android-SpanTextView.svg)](https://jitpack.io/#ttzt777/Android-SpanTextView)
+[![](https://jitpack.io/v/ttzt777/Android-SpanText.svg)](https://jitpack.io/#ttzt777/Android-SpanText)
 ## 引用方式
 - 在项目根目录的build.gradle文件中添加
 ```groovy
@@ -17,6 +17,7 @@
     }
 ```
 ### **span-kernel**
+- 提供SpanUtil及里面的扩展函数，方便给字符串增加Span
 - 支持TextView中Span的点击事件处理，无需设置MovementMethod
 - 优化Span点击逻辑，修复末尾时点击空白区域会判定到最后一个Span的问题
 - 提供自定义点击Span，移除下划线，支持默认点击更改背景色
