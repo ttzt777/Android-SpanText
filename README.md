@@ -12,8 +12,8 @@
 - 对应module添加依赖
 ```groovy
     dependencies {
-        implementation 'com.github.ttzt777.Android-SpanTextView:span-kernel:1.0.0'
-        implementation 'com.github.ttzt777.Android-SpanTextView:span-collapsed:1.0.0'
+        implementation 'com.github.ttzt777.Android-SpanText:span-kernel:1.0.0'
+        implementation 'com.github.ttzt777.Android-SpanText:span-collapsed:1.0.0'
     }
 ```
 ### **span-kernel**
